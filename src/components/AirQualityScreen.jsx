@@ -20,10 +20,29 @@ const AirQualityScreen = () => {
   const [wg, setWg] = useState(0);
   const [time, setTime] = useState('2024-05-17 00:00:00');
   const [scale, setScale] = useState(['primary', 'desconocida', 'Por determinar']);
+  const [latitud, setLatitud] = useState('19.11588055556');
+  const [longitud, setLongitud] = useState('-98.2777487222222');
+  const [temperatura, setTemperatura] = useState('10');
+  const [humedad, setHumedad] = useState(0);
+  const [presion, setPresion] = useState(0);
+  const [descipcion, setDescripcion] = useState("");
+
 
 
 
   const token = 'd735699d24a8d8f860a7d6b9e21ba6a7084c711b';
+  const apiKey = '01bc65faa46020bf0b002dcde4375cd1';
+  const getWeather = async (lat, lon) => {
+    const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric&lang=es`;
+    const response = await fetch(url);
+    const data = await response.json();
+    console.log("Datos clima", data);
+    setTemperatura(data.main.temp);
+    setHumedad(data.main.humidity);
+    setPresion(data.main.pressure);
+    setDescripcion(data.weather[0].description);
+    
+  }
   const getAQI = async (ciudad) => {
     const url = `https://api.waqi.info/feed/${ciudad}/?token=${token}`;
     const response = await fetch(url);
@@ -34,8 +53,12 @@ const AirQualityScreen = () => {
     setSource(data.data.attributions[0]);
     setTime(data.data.time.s);
     setScale(getScale(data.data.aqi));
-
-
+    setLatitud(data.data.city.geo[0]);
+    setLongitud(data.data.city.geo[0]);
+  }
+  const getData = () => {
+    getAQI(city);
+    getWeather(latitud, longitud);
   }
 
 
@@ -87,6 +110,7 @@ const AirQualityScreen = () => {
   //useEffect para traer los datos
   useEffect(() => {
     getAQI(city);
+    getWeather(latitud, longitud)
   }, [])
 
   //
@@ -101,11 +125,11 @@ const AirQualityScreen = () => {
             <div className="card-body">
               <div className="form-group">
                 <label>Buscar</label>
-                <input type="text" class="form-control" placeholder='Ciudad, Estacion o Pais' name="" id="" value={city} onChange={ e => setCity(e.target.value)}/>
+                <input type="text" class="form-control" placeholder='Ciudad, Estacion o Pais' name="" id="" value={city} onChange={e => setCity(e.target.value)} />
               </div>
             </div>
             <div className="card-footer">
-              <button className='btn bg-purple btn-lg' onClick={() => getAQI(city)}>Aceptar</button>
+              <button className='btn bg-purple btn-lg' onClick={() => getData()}>Aceptar</button>
             </div>
           </div>
         </div>
@@ -118,7 +142,20 @@ const AirQualityScreen = () => {
           <h4 className='card-title'> {city} </h4>
         </div>
         <div className='card-body'>
-
+          <div className="row">
+            <div className="col-12">
+              <h1 style={{ fontSize: "10rem" }}>{temperatura}</h1>
+            </div>
+            <div className="col-4">
+              <Componente1 valor={humedad + "%"} text={"Humedad"} />
+            </div>
+            <div className="col-4">
+              <Componente1 valor={presion + "B"} text={"Presion"} />
+            </div>
+            <div className="col-4">
+              <Componente1 valor={descipcion} text={"Descipcion"} />
+            </div>
+          </div>
           <div className='row'>
             <div className='col-md-6 col-xs-12'>
               <Componente1 valor={aqi} text="AQI" icono="far fa-surprise" color={`bg-${scale[0]}`} descripcion={scale[1]} />
