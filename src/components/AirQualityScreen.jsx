@@ -125,7 +125,7 @@ const AirQualityScreen = () => {
             <div className="card-body">
               <div className="form-group">
                 <label>Buscar</label>
-                <input type="text" class="form-control" placeholder='Ciudad, Estacion o Pais' name="" id="" value={city} onChange={e => setCity(e.target.value)} />
+                <input type="text" className="form-control" placeholder='Ciudad, Estacion o Pais' name="" id="" value={city} onChange={e => setCity(e.target.value)} />
               </div>
             </div>
             <div className="card-footer">
