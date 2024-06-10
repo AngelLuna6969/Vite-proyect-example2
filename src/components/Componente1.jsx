@@ -1,6 +1,7 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
-const Componente1 = ({valor,text,color,icono, descripcion}) => {
+const Componente1 = ({ valor, text, color, icono, descripcion }) => {
   return (
     <>
       <div className={`small-box ${color}`}>
@@ -11,11 +12,27 @@ const Componente1 = ({valor,text,color,icono, descripcion}) => {
         <div className='icon'>
           <i className={icono}></i>
         </div>
-        <a href="#" className='small-box-footer '>{ descripcion }</a>
+        <a href="#" className='small-box-footer '>{descripcion}</a>
       </div>
     </>
-    
+
   )
 }
 
 export default Componente1
+
+Componente1.PropTypes={
+  valor: PropTypes.string.isRequired,
+  texto: PropTypes.string,
+  color: PropTypes.string.isRequired,
+  icono: PropTypes.string,
+  descripcion: PropTypes.string,
+}
+
+Componente1.defaultProps={
+  valor: "0%",
+  text: "Nombre del atributo",
+  color: "bg-olive",
+  icono: "far fa-paper-plane",
+  descripcion: "Sin descripcion"
+}

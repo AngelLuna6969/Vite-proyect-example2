@@ -113,10 +113,6 @@ const AirQualityScreen = () => {
     getWeather(latitud, longitud)
   }, [])
 
-  //
-
-
-
   return (
     <>
       <div className="row">
@@ -135,9 +131,7 @@ const AirQualityScreen = () => {
         </div>
       </div>
       <div> Aplicacion para la Calidad del aire <p> <a href={source.url} target='_blank' title='Ir al sitio'>  {source.name}  </a></p> </div>
-
       <div className='card card-info'>
-
         <div className='card-header'>
           <h4 className='card-title'> {city} </h4>
         </div>
@@ -160,23 +154,15 @@ const AirQualityScreen = () => {
             <div className='col-md-6 col-xs-12'>
               <Componente1 valor={aqi} text="AQI" icono="far fa-surprise" color={`bg-${scale[0]}`} descripcion={scale[1]} />
             </div>
-
             <div className='col-md-6 col-xs-12'>
-
               <p>
                 Fecha y hora: {time}
               </p>
               <p>
                 {scale[2]}
               </p>
-
             </div>
-
-
           </div>
-
-
-
           <div className='row'>
             <div className='col-lg-4 col-md-6 col-xs-12'>
               <Componente1 valor={10} text="CO" icono="far fa-paper-plane" color="bg-primary" />
@@ -186,6 +172,9 @@ const AirQualityScreen = () => {
             </div>
             <div className='col-lg-4 col-md-6 col-xs-12'>
               <Componente1 valor={9} text="CO" icono="far fa-surprise" color="bg-warning" />
+            </div>
+            <div className='col-lg-4 col-md-6 col-xs-12'>
+              <Componente1/>
             </div>
           </div>
         </div>
