@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Componente1 from './Componente1';
+import LineChart from '../echarts/LineChart';
 const AirQualityScreen = () => {
 
   const [city, setCity] = useState('Puebla');
@@ -26,6 +27,8 @@ const AirQualityScreen = () => {
   const [humedad, setHumedad] = useState(0);
   const [presion, setPresion] = useState(0);
   const [descipcion, setDescripcion] = useState("");
+  const [temps, setTemps] = useState([]);
+  const [dates, setDates] = useState([]);
 
 
 
@@ -43,6 +46,25 @@ const AirQualityScreen = () => {
     setDescripcion(data.weather[0].description);
     
   }
+
+  const getWeatherForecast = async (lat, lon) => {
+    const url = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}`;
+    const response = await fetch(url);
+    const data = await response.json();
+    console.log("Prediccion del clima de los siguientes 5 dias", data);
+    const lista = data.list;
+    let temperaturas = []
+    let fechas=[]
+    lista.forEach(objeto => {
+      temperaturas.push(objeto.main.temp)
+      fechas.push(objeto.dt_txt)
+    });
+    console.log(temperaturas)
+    console.log(fechas)
+    setTemps(temperaturas)
+    setDates(fechas)
+  }
+
   const getAQI = async (ciudad) => {
     const url = `https://api.waqi.info/feed/${ciudad}/?token=${token}`;
     const response = await fetch(url);
@@ -110,7 +132,8 @@ const AirQualityScreen = () => {
   //useEffect para traer los datos
   useEffect(() => {
     getAQI(city);
-    getWeather(latitud, longitud)
+    getWeather(latitud, longitud);
+    getWeatherForecast(latitud, longitud);
   }, [])
 
   return (
@@ -176,6 +199,9 @@ const AirQualityScreen = () => {
             <div className='col-lg-4 col-md-6 col-xs-12'>
               <Componente1/>
             </div>
+          </div>
+          <div className="row">
+            <LineChart style={{height:400}} temperaturas={temps} fechas={dates} titulo={"prediccion del clima de los proximos 5 dias"}/>
           </div>
         </div>
         <div className='card-footer'>
